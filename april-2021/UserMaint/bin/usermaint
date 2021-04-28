@@ -1,0 +1,5 @@
+#!/usr/bin/env perl
+
+use lib './lib';
+use UserMaint;
+UserMaint->new_with_options->run;
