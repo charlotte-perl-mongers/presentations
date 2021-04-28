@@ -8,7 +8,7 @@ sub run {
     my $self = shift;
 
     if( my $user = $self->find_by_username( $self->username ) ) {
-        print "Deleting ", $self->username, '... ' if $self->verbose;
+        print 'Deleting ', $self->username, '... ' if $self->verbose;
         $user->delete;
         say "done!";
     } 

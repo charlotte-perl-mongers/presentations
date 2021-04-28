@@ -13,7 +13,7 @@ with qw(
 sub run {
     my $self = shift;
 
-    print "Creating ", $self->username, '... ' if $self->verbose;
+    print 'Creating ', $self->username, '... ' if $self->verbose;
     my $user = $self->parent_command->schema->resultset( 'User' )->create({
         username  => $self->username,
         password  => $self->password,
