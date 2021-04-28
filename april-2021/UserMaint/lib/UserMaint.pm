@@ -4,18 +4,15 @@ use v5.32;
 use Moo;
 use CLI::Osprey;
 use DBI;
+use UserMaint::Schema;
 
 #subcommand create => 'UserMaint::Create';
-#subcommand delete => 'UserMaint::Delete';
+subcommand delete => 'UserMaint::Delete';
+subcommand list   => 'UserMaint::List';
 
 has _sqlite_filename => (
     is      => 'ro',
     default => 'db/users.db',
-);
-
-has _sqlite_schema => (
-    is      => 'ro',
-    default => 'db/users.sql',
 );
 
 has _dsn => (
@@ -26,15 +23,12 @@ has _dsn => (
     }
 );
 
-#has _schema => (
-    #is      => 'lazy',
-    #builder => sub{ dist_dir('Dancer2') },
-#);
-
-option verbose => (
-    is    => 'ro',
-    short => 'v',
-    doc   => 'show verbose output',
+has schema => (
+    is      => 'lazy',
+    builder => sub { 
+        my $self = shift;
+        return UserMaint::Schema->connect( $self->_dsn, '', '' ); 
+    },
 );
 
 option debug => (
@@ -44,8 +38,7 @@ option debug => (
 );
 
 # This is rather contrived - we could just as easily do this in the
-# attribute definitions above. And there are better options than
-# system() nowadays...
+# attribute definitions above.
 sub BUILD {
     my( $self, $args ) = @_;
     $self->_create_db unless -e $self->_sqlite_filename;
@@ -65,13 +58,6 @@ sub _create_db {
             notes     TEXT    NULL
         );
     } ) or die "Can't create users database: $!";
-}
-
-# Display a message in verbose mode
-sub _say {
-    my( $self, $message ) = @_;
-    return unless $self->verbose;
-    say $message;
 }
 
 # Display a message in debug mode
