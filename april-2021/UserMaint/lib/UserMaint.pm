@@ -6,7 +6,7 @@ use CLI::Osprey;
 use DBI;
 use UserMaint::Schema;
 
-#subcommand create => 'UserMaint::Create';
+subcommand create => 'UserMaint::Create';
 subcommand delete => 'UserMaint::Delete';
 subcommand list   => 'UserMaint::List';
 
